@@ -41,6 +41,9 @@ class Robot
         return "done"
     end
 
+
+    
+    #based on the turn command right or left turn the robot 90deg in the same position
     def turn(input)
         VALID_TURN.each do |command, dir|
             if input == command

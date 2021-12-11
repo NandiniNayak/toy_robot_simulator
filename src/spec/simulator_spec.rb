@@ -13,9 +13,9 @@ describe Robot do
 
 
   it 'should discard other commands before place' do
-    expect(@simulator.run("move")).to eq("place command must be run first")
-    expect(@simulator.run("left")).to eq("place command must be run first")
-    expect(@simulator.run("right")).to eq("place command must be run first")
+    expect { @simulator.run("move")}.to raise_error("place command must be run first")
+    expect { @simulator.run("left")}.to raise_error("place command must be run first")
+    expect { @simulator.run("right")}.to raise_error("place command must be run first")
   end
 
   it 'should raise exceptions' do
@@ -27,7 +27,7 @@ describe Robot do
 
   it 'is placed correctly' do
     expect(@robot.place(0, 1, :north)).to eq("done")
-    expect(@robot.place(2, 2, :south)).to eq("done")
+    expect(@robot.place(2, 4, :west)).to eq("done")
   end
 
   it 'moves on the table' do
@@ -43,11 +43,7 @@ describe Robot do
     @robot.move
     @robot.turn(:left)
     @robot.move
-
-    expect(@robot.current_position[:posx]).to eq(3)
-    expect(@robot.current_position[:posy]).to eq(3)
-    expect(@robot.current_position[:direction]).to eq(:north)
-
+    expect(@robot.report).to eq("3,3,NORTH")
   end
 
   it 'should rotate right' do
@@ -79,9 +75,21 @@ describe Robot do
   end
 
   it 'shouldn\'t exit the table' do
-    @robot.place(1, 4, :north)
+    @robot.place(0, 4, :north)
     expect{@robot.move}.to raise_error(/invalid move/)
   end
+
+  it 'should suggest a turn if robot cannot be moved on the table in a particular direction' do
+    @robot.place(3, 4, :west)
+    @robot.move
+    @robot.move
+    @robot.turn(:right)
+    expect{@robot.move}.to raise_error(/invalid move turn right/)
+    @robot.turn(:right)
+    @robot.move
+    expect(@robot.report).to eq("2,4,EAST")
+  end
+
 
   it 'should report its position' do
     @robot.place(5, 5, :east)
@@ -97,7 +105,7 @@ describe Robot do
   it 'should ignore invalid commands' do
     expect { @simulator.run("PLACE12NORTH") }.to raise_error(ArgumentError)
     expect { @simulator.run("LEFFT") }.to raise_error(ArgumentError)
-    expect { @simulator.run("RIGHTT") }.to raise_error(ArgumentError)
+    expect { @simulator.run("PLACE 1,2,nor") }.to raise_error(ArgumentError)
   end
 
 end

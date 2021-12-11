@@ -20,6 +20,7 @@ class App
             MOVE
             REPORT
         "
+        # main loop to run the simulator app unless the command is to exit
         loop do
             command = gets.chomp.strip().downcase()
             break if command == "exit"

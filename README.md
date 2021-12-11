@@ -91,6 +91,7 @@ RIGHT
 MOVE
 invalid move turn right to move
 RIGHT
+MOVE
 REPORT
 
 Output: 2,4,EAST
@@ -108,7 +109,7 @@ place command must be run first
 RIGHT
 place command must be run first
 PLACE 1,2,NORTH
-true
+done
 ```
 
 3. **Place command must have valid arguments passed in the order posx,posy and direction**
@@ -124,7 +125,7 @@ PLACE 1,2
 Invalid command: Ensure posx, posy and direction is passed to the place command
             example input : PLACE 0,0,NORTH
 PLACE 0,0,NORTH
-true
+done
 ```
 
 4. **Valid directions are only NORTH|SOUTH|EAST|WEST**
@@ -135,7 +136,7 @@ Invalid direction
 PLACE 1,2,sou
 Invalid direction
 PLACE 1,2,SOUTH
-true
+done
 ```
 
 5. **Position outside of table range is ignored**
@@ -144,7 +145,7 @@ true
 PLACE 10,10,NORTH
 choose index between 0..4
 PLACE 4,4,NORTH
-true
+done
 ```
 
 6. **Position type validated**
@@ -153,7 +154,7 @@ true
 PLACE 1,abc,NORTH
 Invalid position type
 PLACE 1,2,NORTH
-true
+done
 ```
 
 
@@ -184,7 +185,7 @@ I have used Rspec to test the functionality. Although I believe in TDD, I follow
 
 During testing I made a few changes to the code, for ex: to read whether a command was successful I decided to output "done" message. and places where the command could not be taken I raised exceptions and handled them in the code instead of displaying puts msg.
 
-I have 9 test suites for this app tetsing various scenarios
+I have 10 test suites for this app tetsing various scenarios
 
 - should discard other commands before place
 - should raise exceptions
@@ -193,6 +194,7 @@ I have 9 test suites for this app tetsing various scenarios
 - robot should rotate right
 - robot should rotate left
 - robot shouldn\'t exit the table
+- should suggest a turn if robot cannot be moved on the table in a particular direction
 - robot should report its position
 - robot should ignore invalid commands
 
